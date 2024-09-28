@@ -1,4 +1,4 @@
-nclude "huffman.h"
+#include "huffman.h"
 
 /**
  * symbol_delete- A function that deletes a symbol_t data structure
