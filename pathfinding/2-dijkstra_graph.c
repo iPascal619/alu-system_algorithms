@@ -6,22 +6,23 @@
  * @graph: Pointer to the graph.
  * @distance: Array of distances from the start vertex.
  * @visited: Array indicating if a vertex has been visited.
- * @index: Pointer to store the index of the vertex with the minimum distance.
- * author: Pascal Onuoha
- * Return: Pointer to the vertex with
- * the minimum distance, or NULL if none found.
+ * @index: Pointer to store the index of the
+ * vertex with the minimum distance.
+ *
+ * Return: Pointer to the vertex with the minimum distance,
+ * or NULL if none found.
  */
 vertex_t *get_min_distance(graph_t *graph, size_t *distance,
-size_t *visited, size_t *index)
+			   size_t *visited, size_t *index)
 {
-	size_t min = ULONG_MAX;
+	size_t min = INT_MAX;
 	size_t i;
 	vertex_t *vertex = graph->vertices;
 
 	if (vertex == NULL)
 		return (NULL);
 
-	*index = ULONG_MAX;
+	*index = INT_MAX;
 
 	for (i = 0; i < graph->nb_vertices; i++)
 	{
@@ -32,7 +33,7 @@ size_t *visited, size_t *index)
 		}
 	}
 
-	if (*index == ULONG_MAX)
+	if (*index == INT_MAX)
 		return (NULL);
 
 	while (vertex)
@@ -53,7 +54,7 @@ size_t *visited, size_t *index)
  * @target: Pointer to the target vertex.
  */
 void insert_into_queue(graph_t *graph, queue_t *path, vertex_t **path_via,
-					   vertex_t const *start, vertex_t const *target)
+		       vertex_t const *start, vertex_t const *target)
 {
 	size_t i = target->index;
 
@@ -74,8 +75,8 @@ void insert_into_queue(graph_t *graph, queue_t *path, vertex_t **path_via,
 }
 
 /**
- * recursive_dijkstra - Recursive utility to find
- * the shortest path using Dijkstra's algorithm.
+ * recursive_dijkstra - Recursively finds the
+ * shortest path using Dijkstra's algorithm.
  * @graph: Pointer to the graph.
  * @distance: Array of distances from the start vertex.
  * @visited: Array indicating which vertices have been visited.
@@ -84,9 +85,10 @@ void insert_into_queue(graph_t *graph, queue_t *path, vertex_t **path_via,
  * @target: Pointer to the target vertex.
  * @idx: Current index.
  */
-void recursive_dijkstra(graph_t *graph, size_t *distance, size_t *visited,
-						vertex_t **path_via, vertex_t const *start,
-						vertex_t const *target, size_t idx)
+void recursive_dijkstra(graph_t *graph, size_t *distance,
+			size_t *visited,
+			vertex_t **path_via, vertex_t const *start,
+			vertex_t const *target, size_t idx)
 {
 	vertex_t *current;
 	edge_t *edge;
@@ -97,7 +99,7 @@ void recursive_dijkstra(graph_t *graph, size_t *distance, size_t *visited,
 		return;
 
 	printf("Checking %s, distance from %s is %ld\n",
-		   current->content, start->content, distance[current->index]);
+	       current->content, start->content, distance[current->index]);
 	i = current->index;
 	edge = current->edges;
 	while (edge && visited[i] == 0)
@@ -118,7 +120,7 @@ void recursive_dijkstra(graph_t *graph, size_t *distance, size_t *visited,
 }
 
 /**
- * init_dijkstra - Initializes Dijkstra's algorithm.
+ * init_dijkstra - Initializes data structures needed for Dijkstra's algorithm.
  * @graph: Pointer to the graph.
  * @distance: Pointer to the array of distances.
  * @visited: Pointer to the array of visited vertices.
@@ -127,7 +129,7 @@ void recursive_dijkstra(graph_t *graph, size_t *distance, size_t *visited,
  * Return: 0 on success, 1 on failure.
  */
 int init_dijkstra(graph_t *graph, size_t **distance, size_t **visited,
-				  vertex_t ***path_via)
+		  vertex_t ***path_via)
 {
 	size_t i;
 
@@ -151,23 +153,23 @@ int init_dijkstra(graph_t *graph, size_t **distance, size_t **visited,
 	}
 
 	for (i = 0; i < graph->nb_vertices; i++)
-		(*distance)[i] = ULONG_MAX;
+		(*distance)[i] = INT_MAX;
 
 	return (0);
 }
 
 /**
- * dijkstra_graph - Searches for the shortest path
- * from a starting point to a target point in a graph.
+ * dijkstra_graph - Finds the shortest path
+ * from a start to a target vertex in a graph.
  * @graph: Pointer to the graph.
  * @start: Pointer to the start vertex.
  * @target: Pointer to the target vertex.
  *
- * Return: Queue containing the path from start to target,
- * or NULL if no path found.
+ * Return: Queue containing the path from
+ * start to target, or NULL if no path found.
  */
 queue_t *dijkstra_graph(graph_t *graph, vertex_t const *start,
-vertex_t const *target)
+			vertex_t const *target)
 {
 	size_t *distance = NULL, *visited = NULL;
 	queue_t *queue = NULL;
@@ -189,7 +191,8 @@ vertex_t const *target)
 	}
 
 	distance[start->index] = 0;
-	recursive_dijkstra(graph, distance, visited, path_via, start, target, 0);
+	recursive_dijkstra(graph, distance, visited, path_via, start,
+			   target, 0);
 
 	insert_into_queue(graph, queue, path_via, start, target);
 	free(visited);
@@ -201,6 +204,5 @@ vertex_t const *target)
 		queue_delete(queue);
 		return (NULL);
 	}
-
 	return (queue);
 }
